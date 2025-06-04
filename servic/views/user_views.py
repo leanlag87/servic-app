@@ -4,6 +4,7 @@ from django.shortcuts import get_object_or_404
 from ..models import User, UserRoleChangeLog
 from ..serializers import UserProfileSerializer, UserRoleChangeSerializer
 
+
 class UserProfileView(generics.RetrieveUpdateAPIView):
     serializer_class = UserProfileSerializer
     permission_classes = [permissions.IsAuthenticated]
@@ -11,13 +12,14 @@ class UserProfileView(generics.RetrieveUpdateAPIView):
     def get_object(self):
         return self.request.user
 
+
 class UserRoleChangeView(generics.UpdateAPIView):
     serializer_class = UserRoleChangeSerializer
     permission_classes = [permissions.IsAdminUser]
     queryset = User.objects.all()
 
     def get_object(self):
-        user_id = self.kwargs.get('user_id')
+        user_id = self.kwargs.get("user_id")
         return get_object_or_404(User, id=user_id)
 
     def update(self, request, *args, **kwargs):
@@ -29,7 +31,7 @@ class UserRoleChangeView(generics.UpdateAPIView):
         previous_role = user.user_type
 
         # Realizar el cambio de rol
-        user.user_type = serializer.validated_data['user_type']
+        user.user_type = serializer.validated_data["user_type"]
         user.save()
 
         # Registrar el cambio
@@ -37,11 +39,14 @@ class UserRoleChangeView(generics.UpdateAPIView):
             user=user,
             previous_role=previous_role,
             new_role=user.user_type,
-            reason=serializer.validated_data['reason'],
-            changed_by=request.user
+            reason=serializer.validated_data["reason"],
+            changed_by=request.user,
         )
 
-        return Response({
-            'message': 'Rol de usuario actualizado exitosamente',
-            'user': UserProfileSerializer(user).data
-        }, status=status.HTTP_200_OK)
+        return Response(
+            {
+                "message": "Rol de usuario actualizado exitosamente",
+                "user": UserProfileSerializer(user).data,
+            },
+            status=status.HTTP_200_OK,
+        )
