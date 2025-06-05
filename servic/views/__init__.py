@@ -6,6 +6,17 @@ from .provider_views import (
     ProviderRequestListView,
     ProviderRequestDetailView,
 )
+from .service_views import (
+    ServiceCategoryListView,
+    ServiceCategoryDetailView,
+    ServiceCreateView,
+    ServiceListView,
+    ServiceDetailView,
+    ServiceImageUploadView,
+    ServiceImageDeleteView,
+    ServiceImageSetPrimaryView,
+)
+
 
 __all__ = [
     "RegisterView",
@@ -16,4 +27,12 @@ __all__ = [
     "ProviderRequestView",
     "ProviderRequestListView",
     "ProviderRequestDetailView",
+    "ServiceCategoryListView",
+    "ServiceCategoryDetailView",
+    "ServiceCreateView",
+    "ServiceListView",
+    "ServiceDetailView",
+    "ServiceImageUploadView",
+    "ServiceImageDeleteView",
+    "ServiceImageSetPrimaryView",
 ]
