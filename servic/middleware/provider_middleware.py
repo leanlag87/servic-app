@@ -10,8 +10,15 @@ class ServiceProviderMiddleware:
     def __call__(self, request):
         # Lista de URLs que requieren verificación de prestador
         provider_required_urls = [
-            "provider-profile",
+            # "provider-profile",
+            "service-create",
+            "service-image-upload",
             # Agregar más URLs que requieran verificación de prestador
+        ]
+
+        # URLs que requieren solo ser provider (sin perfil completo)
+        provider_basic_urls = [
+            "provider-profile",  # ← MOVER AQUÍ - solo requiere ser provider
         ]
 
         # Obtener la URL actual
@@ -27,6 +34,22 @@ class ServiceProviderMiddleware:
                 )
 
             # Verificar si el usuario es un prestador
+            if request.user.user_type != "provider":
+                return JsonResponse(
+                    {
+                        "detail": "Solo los prestadores de servicios pueden acceder a esta funcionalidad"
+                    },
+                    status=status.HTTP_403_FORBIDDEN,
+                )
+
+        # Verificación completa para funcionalidades avanzadas
+        elif current_url in provider_required_urls:
+            if not request.user.is_authenticated:
+                return JsonResponse(
+                    {"detail": "Se requiere autenticación"},
+                    status=status.HTTP_401_UNAUTHORIZED,
+                )
+
             if request.user.user_type != "provider":
                 return JsonResponse(
                     {
