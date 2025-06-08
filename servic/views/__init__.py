@@ -17,6 +17,13 @@ from .service_views import (
     ServiceImageSetPrimaryView,
 )
 
+from .admin_views import (
+    AdminDashboardView,
+    AdminProviderListView,
+    AdminProviderVerificationView,
+    AdminServiceListView,
+    AdminServiceApprovalView,
+)
 
 __all__ = [
     "RegisterView",
@@ -35,4 +42,10 @@ __all__ = [
     "ServiceImageUploadView",
     "ServiceImageDeleteView",
     "ServiceImageSetPrimaryView",
+    # Nuevas vistas admin
+    "AdminDashboardView",
+    "AdminProviderListView",
+    "AdminProviderVerificationView",
+    "AdminServiceListView",
+    "AdminServiceApprovalView",
 ]
