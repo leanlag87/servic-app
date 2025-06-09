@@ -10,6 +10,7 @@ from ..serializers import (
     ServiceListSerializer,
     ServiceImageSerializer,
 )
+from ..permissions import IsProviderAndVerified
 
 
 class ServiceCategoryListView(generics.ListCreateAPIView):
@@ -28,7 +29,7 @@ class ServiceCategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
 
 class ServiceCreateView(generics.CreateAPIView):
     serializer_class = ServiceSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, IsProviderAndVerified]
     parser_classes = (MultiPartParser, FormParser)
 
     def perform_create(self, serializer):
