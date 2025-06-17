@@ -1,6 +1,7 @@
 from .user import User, UserRoleChangeLog
 from .provider import ServiceProviderProfile, ProviderRequest
 from .service import ServiceCategory, Service, ServiceImage
+from .contract import ServiceContract
 
 __all__ = [
     "User",
@@ -10,4 +11,5 @@ __all__ = [
     "ServiceCategory",
     "Service",
     "ServiceImage",
+    "ServiceContract",
 ]
