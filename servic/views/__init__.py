@@ -1,5 +1,5 @@
 from .auth_views import RegisterView, CustomTokenObtainPairView, LogoutView
-from .user_views import UserProfileView, UserRoleChangeView
+from .user_views import UserProfileView, UserRoleChangeView, ChangePasswordView
 from .provider_views import (
     ServiceProviderProfileView,
     ProviderRequestView,
@@ -31,6 +31,7 @@ __all__ = [
     "LogoutView",
     "UserProfileView",
     "UserRoleChangeView",
+    "ChangePasswordView",
     "ServiceProviderProfileView",
     "ProviderRequestView",
     "ProviderRequestListView",

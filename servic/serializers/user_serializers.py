@@ -122,3 +122,38 @@ class LogoutSerializer(serializers.Serializer):
             "blank": "El token de actualización no puede estar vacío",
         },
     )
+
+
+# Cambiar contraseña con el usuario autenticado
+class ChangePasswordSerializer(serializers.Serializer):
+    old_password = serializers.CharField(
+        required=True,
+        write_only=True,
+        error_messages={"required": "Debe ingresar su contraseña actual"},
+    )
+    new_password = serializers.CharField(
+        required=True,
+        write_only=True,
+        error_messages={"required": "Debe ingresar la nueva contraseña"},
+    )
+    new_password2 = serializers.CharField(
+        required=True,
+        write_only=True,
+        error_messages={"required": "Debe confirmar la nueva contraseña"},
+    )
+
+    def validate_old_password(self, value):
+        user = self.context["request"].user
+        if not user.check_password(value):
+            raise serializers.ValidationError("La contraseña actual es incorrecta")
+        return value
+
+    def validate(self, attrs):
+        if attrs["new_password"] != attrs["new_password2"]:
+            raise serializers.ValidationError(
+                {"new_password2": "Las nuevas contraseñas no coinciden"}
+            )
+        from django.contrib.auth.password_validation import validate_password
+
+        validate_password(attrs["new_password"], self.context["request"].user)
+        return attrs
