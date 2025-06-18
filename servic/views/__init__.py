@@ -1,4 +1,4 @@
-from .auth_views import RegisterView, CustomTokenObtainPairView
+from .auth_views import RegisterView, CustomTokenObtainPairView, LogoutView
 from .user_views import UserProfileView, UserRoleChangeView
 from .provider_views import (
     ServiceProviderProfileView,
@@ -28,6 +28,7 @@ from .admin_views import (
 __all__ = [
     "RegisterView",
     "CustomTokenObtainPairView",
+    "LogoutView",
     "UserProfileView",
     "UserRoleChangeView",
     "ServiceProviderProfileView",

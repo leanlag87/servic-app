@@ -111,3 +111,14 @@ class UserRoleChangeSerializer(serializers.ModelSerializer):
             )
 
         return attrs
+
+
+# Cerrar sesión
+class LogoutSerializer(serializers.Serializer):
+    refresh = serializers.CharField(
+        required=True,
+        error_messages={
+            "required": "El token de actualización es obligatorio",
+            "blank": "El token de actualización no puede estar vacío",
+        },
+    )

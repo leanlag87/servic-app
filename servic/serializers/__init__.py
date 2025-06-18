@@ -3,6 +3,7 @@ from .user_serializers import (
     CustomTokenObtainPairSerializer,
     UserProfileSerializer,
     UserRoleChangeSerializer,
+    LogoutSerializer,
 )
 from .provider_serializers import (
     ServiceProviderProfileSerializer,
@@ -23,6 +24,7 @@ __all__ = [
     "CustomTokenObtainPairSerializer",
     "UserProfileSerializer",
     "UserRoleChangeSerializer",
+    "LogoutSerializer",
     "ServiceProviderProfileSerializer",
     "ProviderRequestSerializer",
     "ProviderRequestCreateSerializer",
