@@ -5,6 +5,8 @@ from .user_serializers import (
     UserRoleChangeSerializer,
     LogoutSerializer,
     ChangePasswordSerializer,
+    PasswordResetRequestSerializer,
+    PasswordResetConfirmSerializer,
 )
 from .provider_serializers import (
     ServiceProviderProfileSerializer,
@@ -27,6 +29,8 @@ __all__ = [
     "UserRoleChangeSerializer",
     "LogoutSerializer",
     "ChangePasswordSerializer",
+    "PasswordResetRequestSerializer",
+    "PasswordResetConfirmSerializer",
     "ServiceProviderProfileSerializer",
     "ProviderRequestSerializer",
     "ProviderRequestCreateSerializer",
