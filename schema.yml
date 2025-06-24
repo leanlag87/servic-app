@@ -1,0 +1,1442 @@
+openapi: 3.0.3
+info:
+  title: Servic App API
+  version: 1.0.0
+  description: Documentación de la API para la aplicación Servic App, que conecta
+    usuarios con prestadores de servicios.
+paths:
+  /api/admin/dashboard/:
+    get:
+      operationId: admin_dashboard_retrieve
+      description: Vista del dashboard administrativo con estadísticas
+      tags:
+      - admin
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/admin/providers/:
+    get:
+      operationId: admin_providers_list
+      description: Listar todos los prestadores para admin
+      tags:
+      - admin
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ServiceProviderProfile'
+          description: ''
+  /api/admin/providers/{user_id}/verify/:
+    get:
+      operationId: admin_providers_verify_retrieve
+      description: Ver información completa del prestador
+      parameters:
+      - in: path
+        name: user_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - admin
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    put:
+      operationId: admin_providers_verify_update
+      description: Verificar/desverificar prestador
+      parameters:
+      - in: path
+        name: user_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - admin
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/admin/services/:
+    get:
+      operationId: admin_services_list
+      description: Listar servicios para aprobación admin
+      tags:
+      - admin
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ServiceList'
+          description: ''
+  /api/admin/services/{service_id}/approve/:
+    put:
+      operationId: admin_services_approve_update
+      description: Aprobar/rechazar servicios
+      parameters:
+      - in: path
+        name: service_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - admin
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/categories/:
+    get:
+      operationId: categories_list
+      parameters:
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - categories
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ServiceCategory'
+          description: ''
+    post:
+      operationId: categories_create
+      tags:
+      - categories
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ServiceCategory'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ServiceCategory'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ServiceCategory'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceCategory'
+          description: ''
+  /api/categories/{id}/:
+    get:
+      operationId: categories_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - categories
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceCategory'
+          description: ''
+    put:
+      operationId: categories_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - categories
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ServiceCategory'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ServiceCategory'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ServiceCategory'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceCategory'
+          description: ''
+    patch:
+      operationId: categories_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - categories
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedServiceCategory'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedServiceCategory'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedServiceCategory'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceCategory'
+          description: ''
+    delete:
+      operationId: categories_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - categories
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/login/:
+    post:
+      operationId: login_create
+      description: |-
+        Takes a set of user credentials and returns an access and refresh JSON web
+        token pair to prove the authentication of those credentials.
+      tags:
+      - login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomTokenObtainPair'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CustomTokenObtainPair'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CustomTokenObtainPair'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomTokenObtainPair'
+          description: ''
+  /api/profile/:
+    get:
+      operationId: profile_retrieve
+      tags:
+      - profile
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+          description: ''
+    put:
+      operationId: profile_update
+      tags:
+      - profile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserProfile'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserProfile'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserProfile'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+          description: ''
+    patch:
+      operationId: profile_partial_update
+      tags:
+      - profile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUserProfile'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUserProfile'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUserProfile'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+          description: ''
+  /api/provider/profile/:
+    get:
+      operationId: provider_profile_retrieve
+      tags:
+      - provider
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: provider_profile_create
+      tags:
+      - provider
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    put:
+      operationId: provider_profile_update
+      tags:
+      - provider
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/provider/request/:
+    post:
+      operationId: provider_request_create
+      tags:
+      - provider
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProviderRequestCreate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ProviderRequestCreate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ProviderRequestCreate'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProviderRequestCreate'
+          description: ''
+  /api/provider/requests/:
+    get:
+      operationId: provider_requests_list
+      tags:
+      - provider
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProviderRequest'
+          description: ''
+  /api/provider/requests/{id}/:
+    get:
+      operationId: provider_requests_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - provider
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProviderRequestReview'
+          description: ''
+    put:
+      operationId: provider_requests_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - provider
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProviderRequestReview'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ProviderRequestReview'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ProviderRequestReview'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProviderRequestReview'
+          description: ''
+    patch:
+      operationId: provider_requests_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - provider
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedProviderRequestReview'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedProviderRequestReview'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedProviderRequestReview'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProviderRequestReview'
+          description: ''
+  /api/register/:
+    post:
+      operationId: register_create
+      tags:
+      - register
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRegister'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserRegister'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserRegister'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserRegister'
+          description: ''
+  /api/services/:
+    get:
+      operationId: services_list
+      parameters:
+      - in: query
+        name: category
+        schema:
+          type: integer
+      - in: query
+        name: city
+        schema:
+          type: string
+      - in: query
+        name: country
+        schema:
+          type: string
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - in: query
+        name: price_type
+        schema:
+          type: string
+          enum:
+          - fixed
+          - hourly
+          - negotiable
+        description: |-
+          * `hourly` - Por Hora
+          * `fixed` - Precio Fijo
+          * `negotiable` - Negociable
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: query
+        name: state
+        schema:
+          type: string
+      - in: query
+        name: status
+        schema:
+          type: string
+          enum:
+          - active
+          - inactive
+          - pending
+        description: |-
+          * `active` - Activo
+          * `inactive` - Inactivo
+          * `pending` - Pendiente
+      tags:
+      - services
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ServiceList'
+          description: ''
+  /api/services/{id}/:
+    get:
+      operationId: services_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - services
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Service'
+          description: ''
+    put:
+      operationId: services_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - services
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Service'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Service'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Service'
+          description: ''
+    patch:
+      operationId: services_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - services
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedService'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedService'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Service'
+          description: ''
+    delete:
+      operationId: services_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - services
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/services/{service_id}/images/:
+    post:
+      operationId: services_images_create
+      parameters:
+      - in: path
+        name: service_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - services
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ServiceImage'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ServiceImage'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceImage'
+          description: ''
+  /api/services/create/:
+    post:
+      operationId: services_create_create
+      tags:
+      - services
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Service'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Service'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Service'
+          description: ''
+  /api/services/images/{id}/:
+    delete:
+      operationId: services_images_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - services
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/services/images/{id}/set-primary/:
+    put:
+      operationId: services_images_set_primary_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - services
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ServiceImage'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ServiceImage'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ServiceImage'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceImage'
+          description: ''
+    patch:
+      operationId: services_images_set_primary_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - services
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedServiceImage'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedServiceImage'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedServiceImage'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceImage'
+          description: ''
+  /api/users/{user_id}/change-role/:
+    put:
+      operationId: users_change_role_update
+      parameters:
+      - in: path
+        name: user_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRoleChange'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserRoleChange'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserRoleChange'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserRoleChange'
+          description: ''
+    patch:
+      operationId: users_change_role_partial_update
+      parameters:
+      - in: path
+        name: user_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUserRoleChange'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUserRoleChange'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUserRoleChange'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserRoleChange'
+          description: ''
+components:
+  schemas:
+    CustomTokenObtainPair:
+      type: object
+      properties:
+        email:
+          type: string
+          writeOnly: true
+        password:
+          type: string
+          writeOnly: true
+      required:
+      - email
+      - password
+    IdentificationTypeEnum:
+      enum:
+      - dni
+      - ce
+      - passport
+      type: string
+      description: |-
+        * `dni` - DNI
+        * `ce` - Carné de Extranjería
+        * `passport` - Pasaporte
+    NullEnum:
+      enum:
+      - null
+    PatchedProviderRequestReview:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/Status698Enum'
+        admin_response:
+          type: string
+          nullable: true
+          description: Respuesta del administrador
+    PatchedService:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+          maxLength: 200
+        description:
+          type: string
+        category:
+          type: integer
+        category_name:
+          type: string
+          readOnly: true
+        provider:
+          type: integer
+          readOnly: true
+        provider_email:
+          type: string
+          format: email
+          readOnly: true
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        price_type:
+          $ref: '#/components/schemas/PriceTypeEnum'
+        price_type_display:
+          type: string
+          readOnly: true
+        location:
+          type: string
+          maxLength: 200
+        city:
+          type: string
+          maxLength: 100
+        state:
+          type: string
+          maxLength: 100
+        country:
+          type: string
+          maxLength: 100
+        availability_start:
+          type: string
+          format: time
+        availability_end:
+          type: string
+          format: time
+        available_days:
+          type: string
+          maxLength: 100
+        status:
+          $ref: '#/components/schemas/Status723Enum'
+        status_display:
+          type: string
+          readOnly: true
+        images:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServiceImage'
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+    PatchedServiceCategory:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 100
+        description:
+          type: string
+        icon:
+          type: string
+          format: uri
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+    PatchedServiceImage:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        image:
+          type: string
+          format: uri
+        is_primary:
+          type: boolean
+    PatchedUserProfile:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        email:
+          type: string
+          format: email
+          readOnly: true
+        first_name:
+          type: string
+          title: Nombre
+          maxLength: 150
+        last_name:
+          type: string
+          title: Apellidos
+          maxLength: 150
+        user_type:
+          readOnly: true
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/UserTypeEnum'
+          - $ref: '#/components/schemas/NullEnum'
+    PatchedUserRoleChange:
+      type: object
+      properties:
+        user_type:
+          $ref: '#/components/schemas/UserTypeEnum'
+        reason:
+          type: string
+          maxLength: 500
+    PriceTypeEnum:
+      enum:
+      - hourly
+      - fixed
+      - negotiable
+      type: string
+      description: |-
+        * `hourly` - Por Hora
+        * `fixed` - Precio Fijo
+        * `negotiable` - Negociable
+    ProviderRequest:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        user_email:
+          type: string
+          format: email
+          readOnly: true
+        user_name:
+          type: string
+          readOnly: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/Status698Enum'
+          readOnly: true
+        status_display:
+          type: string
+          readOnly: true
+        request_reason:
+          type: string
+          description: Razón por la que desea convertirse en prestador
+        admin_response:
+          type: string
+          readOnly: true
+          nullable: true
+          description: Respuesta del administrador
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - admin_response
+      - created_at
+      - id
+      - request_reason
+      - status
+      - status_display
+      - updated_at
+      - user_email
+      - user_name
+    ProviderRequestCreate:
+      type: object
+      properties:
+        request_reason:
+          type: string
+          description: Razón por la que desea convertirse en prestador
+      required:
+      - request_reason
+    ProviderRequestReview:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/Status698Enum'
+        admin_response:
+          type: string
+          nullable: true
+          description: Respuesta del administrador
+    Service:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+          maxLength: 200
+        description:
+          type: string
+        category:
+          type: integer
+        category_name:
+          type: string
+          readOnly: true
+        provider:
+          type: integer
+          readOnly: true
+        provider_email:
+          type: string
+          format: email
+          readOnly: true
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        price_type:
+          $ref: '#/components/schemas/PriceTypeEnum'
+        price_type_display:
+          type: string
+          readOnly: true
+        location:
+          type: string
+          maxLength: 200
+        city:
+          type: string
+          maxLength: 100
+        state:
+          type: string
+          maxLength: 100
+        country:
+          type: string
+          maxLength: 100
+        availability_start:
+          type: string
+          format: time
+        availability_end:
+          type: string
+          format: time
+        available_days:
+          type: string
+          maxLength: 100
+        status:
+          $ref: '#/components/schemas/Status723Enum'
+        status_display:
+          type: string
+          readOnly: true
+        images:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServiceImage'
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - availability_end
+      - availability_start
+      - available_days
+      - category
+      - category_name
+      - city
+      - country
+      - created_at
+      - description
+      - id
+      - location
+      - price
+      - price_type
+      - price_type_display
+      - provider
+      - provider_email
+      - state
+      - status_display
+      - title
+      - updated_at
+    ServiceCategory:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 100
+        description:
+          type: string
+        icon:
+          type: string
+          format: uri
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - description
+      - id
+      - name
+      - updated_at
+    ServiceImage:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        image:
+          type: string
+          format: uri
+        is_primary:
+          type: boolean
+      required:
+      - id
+      - image
+    ServiceList:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+          maxLength: 200
+        category_name:
+          type: string
+        provider_name:
+          type: string
+          readOnly: true
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        price_type:
+          $ref: '#/components/schemas/PriceTypeEnum'
+        location:
+          type: string
+          maxLength: 200
+        primary_image:
+          type: string
+          readOnly: true
+        status:
+          $ref: '#/components/schemas/Status723Enum'
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - category_name
+      - created_at
+      - id
+      - location
+      - price
+      - price_type
+      - primary_image
+      - provider_name
+      - title
+    ServiceProviderProfile:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        identification_type:
+          $ref: '#/components/schemas/IdentificationTypeEnum'
+        identification_number:
+          type: string
+          maxLength: 20
+        phone_number:
+          type: string
+          maxLength: 15
+        address:
+          type: string
+        city:
+          type: string
+          maxLength: 100
+        state:
+          type: string
+          maxLength: 100
+        country:
+          type: string
+          maxLength: 100
+        certification_file:
+          type: string
+          format: uri
+        certification_description:
+          type: string
+        years_of_experience:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        is_verified:
+          type: boolean
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - address
+      - certification_description
+      - certification_file
+      - city
+      - country
+      - created_at
+      - id
+      - identification_number
+      - identification_type
+      - is_verified
+      - phone_number
+      - state
+      - updated_at
+      - years_of_experience
+    Status698Enum:
+      enum:
+      - pending
+      - approved
+      - rejected
+      type: string
+      description: |-
+        * `pending` - Pendiente
+        * `approved` - Aprobada
+        * `rejected` - Rechazada
+    Status723Enum:
+      enum:
+      - active
+      - inactive
+      - pending
+      type: string
+      description: |-
+        * `active` - Activo
+        * `inactive` - Inactivo
+        * `pending` - Pendiente
+    UserProfile:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        email:
+          type: string
+          format: email
+          readOnly: true
+        first_name:
+          type: string
+          title: Nombre
+          maxLength: 150
+        last_name:
+          type: string
+          title: Apellidos
+          maxLength: 150
+        user_type:
+          readOnly: true
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/UserTypeEnum'
+          - $ref: '#/components/schemas/NullEnum'
+      required:
+      - email
+      - id
+      - user_type
+    UserRegister:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          writeOnly: true
+        password2:
+          type: string
+          writeOnly: true
+        first_name:
+          type: string
+        last_name:
+          type: string
+      required:
+      - email
+      - first_name
+      - last_name
+      - password
+      - password2
+    UserRoleChange:
+      type: object
+      properties:
+        user_type:
+          $ref: '#/components/schemas/UserTypeEnum'
+        reason:
+          type: string
+          maxLength: 500
+      required:
+      - reason
+      - user_type
+    UserTypeEnum:
+      enum:
+      - common
+      - provider
+      type: string
+      description: |-
+        * `common` - Usuario Común
+        * `provider` - Prestador de Servicios
+  securitySchemes:
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
