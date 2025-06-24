@@ -22,3 +22,21 @@ admin.site.register(ServiceCategory)
 admin.site.register(Service)
 admin.site.register(ServiceImage)
 admin.site.register(ServiceContract)
+
+
+# Configuración del panel de administración
+admin.site.site_header = "Servic Admin"
+admin.site.site_title = "Servic Admin Portal"
+admin.site.index_title = "Bienvenido al panel de administración de Servic"
+# admin.site.site_url = None  # Deshabilitar el enlace al sitio principal
+admin.site.site_url = "https://github.com/leanlag87/servic-app"
+
+admin.site.empty_value_display = (
+    "-sin datos-"  # Valor por defecto para campos vacíos en el admin
+)
+
+# Templates personalizados.
+# admin.site.login_template = "admin/login.html"
+
+# Mensaje personalizado de despedida
+# admin.site.logout_template = "admin/logout.html"
